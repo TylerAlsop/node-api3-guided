@@ -1,4 +1,5 @@
 const express = require("express")
+const cors = require("cors");
 const welcomeRouter = require("./welcome/welcome-router")
 const usersRouter = require("./users/users-router")
 
@@ -6,6 +7,7 @@ const server = express()
 const port = 4000
 
 server.use(express.json())
+server.use(cors())
 
 server.use("/", welcomeRouter)
 server.use("/users", usersRouter)
