@@ -13,8 +13,9 @@ server.use(cors())
 // server.use(morgan())
 
 //////// Building a custom middleware instead of using morgan ////////
-server.use((req, res) => {
+server.use((req, res, next) => {
 	console.log(`${new Date().toISOString()} ${req.ip} ${req.method} ${req.url}`)
+	next()
 })
 
 server.use("/", welcomeRouter)
