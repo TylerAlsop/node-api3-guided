@@ -27,32 +27,12 @@ router.get("/", (req, res) => {
 })
 
 // This handles the route `GET /users/:id`
-router.get("/:id", (req, res) => {
-	users.findById(req.params.id)
-		.then((user) => {
-			if (user) {
-				res.status(200).json(user)
-			} else {
-				res.status(404).json({
-					message: "User not found",
-				})
-			}
-		})
-		.catch((error) => {
-			console.log(error)
-			res.status(500).json({
-				message: "Error retrieving the user",
-			})
-		})
+router.get("/:id", validateUserID(), (req, res) => {
+	res.status(200).json(req.user)
 })
 
 // This handles the route `POST /users`
-router.post("/", (req, res) => {
-	if (!req.body.name || !req.body.email) {
-		return res.status(400).json({
-			message: "Missing user name or email",
-		})
-	}
+router.post("/", validateUserCredentials(), (req, res) => {
 
 	users.add(req.body)
 		.then((user) => {
@@ -67,22 +47,11 @@ router.post("/", (req, res) => {
 })
 
 // This handles the route `PUT /users/:id`
-router.put("/:id", (req, res) => {
-	if (!req.body.name || !req.body.email) {
-		return res.status(400).json({
-			message: "Missing user name or email",
-		})
-	}
+router.put("/:id", validateUserCredentials(), validateUserID(), (req, res) => {
 
 	users.update(req.params.id, req.body)
 		.then((user) => {
-			if (user) {
-				res.status(200).json(user)
-			} else {
-				res.status(404).json({
-					message: "The user could not be found",
-				})
-			}
+			res.status(200).json(user)
 		})
 		.catch((error) => {
 			console.log(error)
@@ -117,7 +86,7 @@ router.delete("/:id", (req, res) => {
 // Since posts in this case is a sub-resource of the user resource,
 // include it as a sub-route. If you list all of a users posts, you
 // don't want to see posts from another user.
-router.get("/:id/posts", (req, res) => {
+router.get("/:id/posts", validateUserID(), (req, res) => {
 	users.findUserPosts(req.params.id)
 		.then((posts) => {
 			res.status(200).json(posts)
@@ -152,7 +121,7 @@ router.get("/:id/posts/:postId", (req, res) => {
 		})
 })
 
-router.post("/:id/posts", (req, res) => {
+router.post("/:id/posts", validateUserID(), (req, res) => {
 	if (!req.body.text) {
 		// Make sure you have a return statement, otherwise the
 		// function will continue running and you'll see ERR_HTTP_HEADERS_SENT
@@ -172,5 +141,42 @@ router.post("/:id/posts", (req, res) => {
 			})
 		})
 })
+
+function validateUserID() {
+	return (req, res, next) => {
+		users.findById(req.params.id)
+			.then((user) => {
+				if (user) {
+					req.user = user
+					//This makes the object "user" available to later middleware functions.
+					next()
+					//next means that here the middleware did what it was supposed to do and now move on to the next middleware.
+					//If you don't want
+				} else {
+					res.status(404).json({
+						message: "The user with that ID could not be found."
+					})
+				}
+			})
+			.catch((error) => {
+				console.log(error)
+				res.status(500).json({
+					message: "Could not find user.",
+				})
+			})
+	}
+}
+
+function validateUserCredentials() {
+	return (req, res, next) => {
+		if (!req.body.name || !req.body.email) {
+			return res.status(400).json({
+				message: "Missing user name or email!",
+			})
+		} else {
+			next()
+		}
+	}
+}
 
 module.exports = router
