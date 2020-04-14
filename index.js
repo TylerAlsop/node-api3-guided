@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
-const morgan = require("morgan");
+// const morgan = require("morgan");
+const logger = require("./middleware/logger")
 
 const welcomeRouter = require("./welcome/welcome-router");
 const usersRouter = require("./users/users-router");
@@ -13,10 +14,7 @@ server.use(cors())
 // server.use(morgan())
 
 //////// Building a custom middleware instead of using morgan ////////
-server.use((req, res, next) => {
-	console.log(`${new Date().toISOString()} ${req.ip} ${req.method} ${req.url}`)
-	next()
-})
+server.use(logger);
 
 server.use("/", welcomeRouter)
 server.use("/users", usersRouter)
