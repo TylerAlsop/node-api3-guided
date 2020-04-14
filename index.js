@@ -1,20 +1,22 @@
+//////// Require ////////
 const express = require("express");
 const cors = require("cors");
 // const morgan = require("morgan");
 const logger = require("./middleware/logger")
 
+
+//////// Routers ////////
 const welcomeRouter = require("./welcome/welcome-router");
 const usersRouter = require("./users/users-router");
 
+//////// Servers / Middlewares ////////
 const server = express()
 const port = 4000
 
 server.use(express.json())
 server.use(cors())
 // server.use(morgan())
-
-//////// Building a custom middleware instead of using morgan ////////
-server.use(logger);
+server.use(logger({ format: "short" }));
 
 server.use("/", welcomeRouter)
 server.use("/users", usersRouter)
