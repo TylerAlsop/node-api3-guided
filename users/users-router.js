@@ -19,10 +19,14 @@ router.get("/", (req, res) => {
 			res.status(200).json(users)
 		})
 		.catch((error) => {
-			console.log(error)
-			res.status(500).json({
-				message: "Error retrieving the users",
-			})
+			next(error)
+			// Calling next(error will skip to the error handler)
+
+
+			// console.log(error)
+			// res.status(500).json({
+			// 	message: "Error retrieving the users",
+			// })
 		})
 })
 
@@ -39,10 +43,12 @@ router.post("/", validateUserCredentials(), (req, res) => {
 			res.status(201).json(user)
 		})
 		.catch((error) => {
-			console.log(error)
-			res.status(500).json({
-				message: "Error adding the user",
-			})
+			next(error)
+
+			// console.log(error)
+			// res.status(500).json({
+			// 	message: "Error adding the user",
+			// })
 		})
 })
 
@@ -54,10 +60,12 @@ router.put("/:id", validateUserCredentials(), validateUserID(), (req, res) => {
 			res.status(200).json(user)
 		})
 		.catch((error) => {
-			console.log(error)
-			res.status(500).json({
-				message: "Error updating the user",
-			})
+			next(error)
+
+			// console.log(error)
+			// res.status(500).json({
+			// 	message: "Error updating the user",
+			// })
 		})
 })
 
@@ -76,10 +84,12 @@ router.delete("/:id", (req, res) => {
 			}
 		})
 		.catch((error) => {
-			console.log(error)
-			res.status(500).json({
-				message: "Error removing the user",
-			})
+			next(error)
+
+			// console.log(error)
+			// res.status(500).json({
+			// 	message: "Error removing the user",
+			// })
 		})
 })
 
@@ -92,10 +102,12 @@ router.get("/:id/posts", validateUserID(), (req, res) => {
 			res.status(200).json(posts)
 		})
 		.catch((error) => {
-			console.log(error)
-			res.status(500).json({
-				message: "Could not get user posts",
-			})
+			next(error)
+
+			// console.log(error)
+			// res.status(500).json({
+			// 	message: "Could not get user posts",
+			// })
 		})
 })
 
@@ -114,10 +126,12 @@ router.get("/:id/posts/:postId", (req, res) => {
 			}
 		})
 		.catch((error) => {
-			console.log(error)
-			res.status(500).json({
-				message: "Could not get user post",
-			})
+			next(error)
+
+			// console.log(error)
+			// res.status(500).json({
+			// 	message: "Could not get user post",
+			// })
 		})
 })
 
@@ -135,10 +149,12 @@ router.post("/:id/posts", validateUserID(), (req, res) => {
 			res.status(201).json(post)
 		})
 		.catch((error) => {
-			console.log(error)
-			res.status(500).json({
-				message: "Could not create user post",
-			})
+			next(error)
+
+			// console.log(error)
+			// res.status(500).json({
+			// 	message: "Could not create user post",
+			// })
 		})
 })
 
@@ -159,10 +175,12 @@ function validateUserID() {
 				}
 			})
 			.catch((error) => {
-				console.log(error)
-				res.status(500).json({
-					message: "Could not find user.",
-				})
+				next(error)
+
+				// console.log(error)
+				// res.status(500).json({
+				// 	message: "Could not find user.",
+				// })
 			})
 	}
 }
