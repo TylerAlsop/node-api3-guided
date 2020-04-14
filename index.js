@@ -10,7 +10,12 @@ const port = 4000
 
 server.use(express.json())
 server.use(cors())
-server.use(morgan())
+// server.use(morgan())
+
+//////// Building a custom middleware instead of using morgan ////////
+server.use((req, res) => {
+	console.log(`${new Date().toISOString()} ${req.ip} ${req.method} ${req.url}`)
+})
 
 server.use("/", welcomeRouter)
 server.use("/users", usersRouter)
