@@ -167,7 +167,7 @@ function validateUserID() {
 					//This makes the object "user" available to later middleware functions.
 					next()
 					//next means that here the middleware did what it was supposed to do and now move on to the next middleware.
-					//If you don't want
+					// if you want to cancel the request from middleware,just don't call next
 				} else {
 					res.status(404).json({
 						message: "The user with that ID could not be found."

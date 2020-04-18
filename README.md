@@ -1,5 +1,8 @@
 # Express Middleware
 
+The code repository for this lecture can be found at:
+https://github.com/jsonmaur/node-api3-guided/tree/lecture_04-13-20
+
 Guided project for **Node API 3** module.
 
 In this project we will learn how to create a very simple Web API using `Node.js` and `Express`, and learn to use and create `Express Middleware`.
